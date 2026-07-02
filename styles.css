@@ -75,6 +75,11 @@ body {
     overflow: hidden;
 }
 
+#cw-logo {
+    margin-top: 18px;
+    width: min(240px, 80%);
+    height: auto;
+}
 
 #start-btn {
     padding: 10px 16px;
@@ -116,8 +121,20 @@ body {
 }
 
 .bad-drop {
-    background-color: #ff4444;
+    
+     position: absolute;
+    width: 60px;  /* increased from 40px */
+    height: 60px; /* increased from 40px */
+    background-color: #442e1abe;
+    border-radius: 50%;
+    animation: dropFall linear forwards;
+    transform-origin: center;
+    cursor: pointer;
+    padding: 15px;  /* Add padding for larger click area */
+    margin: -15px;  /* Offset padding to maintain visual size */
+    transition: transform 0.1s ease;  /* Smooth hover effect */
 }
+
 
 .game-title {
     color: #131313;

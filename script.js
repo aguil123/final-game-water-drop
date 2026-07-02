@@ -155,9 +155,12 @@ gameContainer.addEventListener("click", (event) => {
 });
 
 function createDrop() {
-  // Create a new div element that will be our water drop
+  // Create a new div element that will be our drop
   const drop = document.createElement("div");
-  drop.className = "water-drop";
+
+  // Randomly choose blue or brown drops
+  const isBrown = Math.random() < 0.5;
+  drop.className = isBrown ? "bad-drop" : "water-drop";
 
   // Make drops different sizes for visual variety
   const initialSize = 60;
@@ -174,7 +177,7 @@ function createDrop() {
   drop.style.animationDuration = "4s";
 
   // Add the new drop to the game screen
-  document.getElementById("game-container").appendChild(drop);
+  gameContainer.appendChild(drop);
 
   // Remove drops from the DOM after the fall animation ends
   drop.addEventListener("animationend", () => {
@@ -199,7 +202,7 @@ function detectCollision(laser, drop){
 //collision check function
 function checkLaserCollisions(){
   const gameContainerRect = gameContainer.getBoundingClientRect();
-  const allDrops = gameContainer.querySelectorAll(".water-drop");
+  const allDrops = gameContainer.querySelectorAll(".bad-drop");
 
   //loop through each laser backwards to safely remove them if they hit a drop
   for(let i = lasers.length - 1; i >= 0; i--){
