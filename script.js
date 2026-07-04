@@ -1,11 +1,21 @@
 // Variables to control game state
 let gameRunning = false; // Keeps track of whether game is active or not
 let dropMaker; // Will store our timer that creates drops regularly
+let timerInterval; // Will store the countdown timer interval
+let currentDifficulty = "easy";
+let timeLeft = 30;
+
+const difficultySettings = {
+  easy: { spawnInterval: 1400, fallSpeedMultiplier: 2 },
+  medium: { spawnInterval: 1000, fallSpeedMultiplier: 3},
+  hard: { spawnInterval: 700, fallSpeedMultiplier: 4 },
+};
 
 // Water can control variables
 const waterCan = document.getElementById("water-can");
 const gameContainer = document.getElementById("game-container");
 let score = document.getElementById("score");
+const timerDisplay = document.getElementById("time");
 let canX = 0;
 let canY = 0;
 const canSpeed = 5; // Pixels per frame
@@ -100,15 +110,57 @@ gameLoop();
 
 // Wait for button click to start the game
 document.getElementById("start-btn").addEventListener("click", startGame);
+document.getElementById("difficulty-select").addEventListener("change", (event) => {
+  currentDifficulty = event.target.value;
+
+  if (gameRunning) {
+    startDropSpawner();
+    startTimer();
+  }
+});
+
+function startDropSpawner() {
+  clearInterval(dropMaker);
+  const settings = difficultySettings[currentDifficulty] || difficultySettings.easy;
+  dropMaker = setInterval(createDrop, settings.spawnInterval);
+}
 
 function startGame() {
   // Prevent multiple games from running at once
   if (gameRunning) return;
 
   gameRunning = true;
+  startDropSpawner();
+  startTimer();
+}
 
-  // Create new drops every second (1000 milliseconds)
-  dropMaker = setInterval(createDrop, 1000);
+function startTimer() {
+  score.textContent = "0"; // Reset score
+  clearInterval(timerInterval);
+  timeLeft = 30;
+  updateTimerDisplay();
+
+  timerInterval = setInterval(() => {
+    timeLeft -= 1;
+    updateTimerDisplay();
+
+    if (timeLeft <= 0) {
+      endGame();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  if (timerDisplay) {
+    timerDisplay.textContent = timeLeft;
+  }
+}
+
+function endGame() {
+  gameRunning = false;
+  clearInterval(dropMaker);
+  clearInterval(timerInterval);
+  timerDisplay.textContent = "Game Over!";
 }
 
 // Shoot a laser when the user clicks inside the container
@@ -174,7 +226,8 @@ function createDrop() {
   drop.style.left = xPosition + "px";
 
   // Set the animation duration so the drop falls smoothly
-  drop.style.animationDuration = "4s";
+  const settings = difficultySettings[currentDifficulty] || difficultySettings.easy;
+  drop.style.animationDuration = `${4 / settings.fallSpeedMultiplier}s`;
 
   // Add the new drop to the game screen
   gameContainer.appendChild(drop);

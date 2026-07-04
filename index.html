@@ -10,9 +10,17 @@
     <div class="game-wrapper">
         <h1 class="game-title">Water Drop</h1>
         <p class="game-tagline">Click to shoot down the bad drops! Use WASD to move.</p>
+        <div class="level-selector">
+            <label for="difficulty-select">Level:</label>
+            <select id="difficulty-select" name="difficulty">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
         <div class="score-panel">
             <div class="score">Score: <span id="score">0</span></div>
-            <div class="timer">Time: <span id="time">30</span>s</div>
+            <div class="timer">Time: <span id="time">30</span></div>
             <button id="start-btn">Start Game</button>
         </div>
         
