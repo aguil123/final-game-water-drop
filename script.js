@@ -5,6 +5,9 @@ let timerInterval; // Will store the countdown timer interval
 let currentDifficulty = "easy";
 let timeLeft = 30;
 
+
+
+
 const difficultySettings = {
   easy: { spawnInterval: 1400, fallSpeedMultiplier: 2 },
   medium: { spawnInterval: 1000, fallSpeedMultiplier: 3},
@@ -77,6 +80,8 @@ function updateLasers() {
   // Measure the visible container once per frame for offscreen checks
   const containerRect = gameContainer.getBoundingClientRect();
 
+  
+  
   // Iterate backwards to safely remove lasers while looping
   for (let i = lasers.length - 1; i >= 0; i--) {
     const laser = lasers[i];
@@ -165,6 +170,11 @@ function endGame() {
 
 // Shoot a laser when the user clicks inside the container
 gameContainer.addEventListener("click", (event) => {
+  const shootSound = new Audio("sound effects/shoot.mp3");
+  shootSound.volume = 0.1; // Set volume to 10%
+  shootSound.play();
+
+
   // Convert the click from window coordinates into container-local coordinates
   const containerRect = gameContainer.getBoundingClientRect();
   const targetX = event.clientX - containerRect.left;
@@ -281,3 +291,4 @@ function checkLaserCollisions(){
 
   }
 }
+
